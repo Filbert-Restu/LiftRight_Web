@@ -1,45 +1,47 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "LiftRight",
+    "slug": "liftright",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "liftrightweb",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "ios": {
-      "icon": "./assets/expo.icon"
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "LiftRight terhubung ke sensor punggung lewat Bluetooth untuk memantau data latihan."
+      }
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "package": "com.liftright.app",
+      "permissions": [
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN"
+      ]
     },
     "plugins": [
       "expo-router",
+      "expo-font",
       [
-        "expo-splash-screen",
+        "react-native-ble-plx",
         {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "isBackgroundEnabled": true,
+          "modes": [
+            "central"
+          ],
+          "bluetoothAlwaysPermission": "LiftRight membutuhkan izin Bluetooth untuk terhubung ke unit sensor punggung."
         }
-      ],
-      "react-native-ble-plx",
-      "expo-sqlite",
-      "expo-secure-store"
+      ]
     ],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e7ddc576-8cfc-4aaf-bc1d-b4577b0c3537"
+      }
     }
   }
 }

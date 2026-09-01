@@ -1,0 +1,39 @@
+{
+  "deviceName": "LiftRight-MockSensor",
+  "battery": 95,
+  "reps": [
+    {
+      "repIndex": 1,
+      "durationMs": 1200,
+      "peakVelocity": 0.65,
+      "meanVelocity": 0.45,
+      "trunkAngleMin": 12.5,
+      "trunkAngleMax": 45.0,
+      "deviationScore": 3.2,
+      "classification": "normal",
+      "confidence": 98
+    },
+    {
+      "repIndex": 2,
+      "durationMs": 1350,
+      "peakVelocity": 0.60,
+      "meanVelocity": 0.41,
+      "trunkAngleMin": 13.0,
+      "trunkAngleMax": 46.2,
+      "deviationScore": 5.1,
+      "classification": "normal",
+      "confidence": 95
+    },
+    {
+      "repIndex": 3,
+      "durationMs": 1500,
+      "peakVelocity": 0.48,
+      "meanVelocity": 0.32,
+      "trunkAngleMin": 15.0,
+      "trunkAngleMax": 50.1,
+      "deviationScore": 12.4,
+      "classification": "fatigue",
+      "confidence": 91
+    }
+  ]
+}

@@ -50,3 +50,39 @@ export const mockRepSummaries = [
     timestampMs: 25000,
   }
 ];
+
+// --- TAMBAHKAN BAGIAN DI BAWAH INI ---
+
+class MockBleTransport {
+  private isConnected = false;
+
+  async connect() {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    this.isConnected = true;
+    console.log("Mock BLE Connected");
+    return true;
+  }
+
+  // Fungsi ini yang bertugas mengirim data repetisi satu per satu dengan jeda waktu
+  subscribeToRepSummaries(onRepReceived: (rep: typeof mockRepSummaries[0]) => void) {
+    if (!this.isConnected) {
+      console.warn("Belum tersambung secara mock!");
+      return;
+    }
+
+    let index = 0;
+    // Mengirim data baru setiap 3 detik sekali untuk meniru jeda orang latihan
+    const timer = setInterval(() => {
+      if (index < mockRepSummaries.length) {
+        onRepReceived(mockRepSummaries[index]);
+        index++;
+      } else {
+        clearInterval(timer); // Berhenti kalau datanya sudah habis (sampai rep ke-4)
+      }
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }
+}
+
+export const mockBle = new MockBleTransport();
