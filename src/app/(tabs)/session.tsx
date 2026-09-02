@@ -59,7 +59,6 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { mockRepSummaries } from '../../ble/mock/MockBleTransport';
-import { FrostedCard } from '../../components/FrostedCard';
 
 export default function SessionScreen() {
   const router = useRouter();
@@ -80,98 +79,75 @@ export default function SessionScreen() {
   }, [isPaused]);
 
   return (
-    <ScrollView className="flex-1 bg-background px-gutter pt-xl" contentContainerStyle={{ paddingBottom: 40 }}>
-      <View className="max-w-md w-full mx-auto justify-between flex-1">
+    <ScrollView 
+      className="flex-1 bg-background" 
+      contentContainerStyle={{ padding: 24, paddingBottom: 140, justifyContent: 'space-between', flexGrow: 1 }}
+    >
+      <View className="max-w-md w-full mx-auto" style={{ gap: 28 }}>
         
         {/* Header Atas */}
-        <View className="items-center mb-6">
-          <Text className="text-base font-semibold text-on-surface-variant">Barbell Squat</Text>
-          <Text className="text-[11px] text-outline uppercase tracking-wider mt-0.5">
-            Set 3 of 5 • Real-time BLE Feed
+        <View className="items-center mt-2">
+          <Text className="text-xl font-extrabold text-on-surface tracking-tight" style={{ fontFamily: 'system-ui, sans-serif' }}>
+            Barbell Squat
+          </Text>
+          <Text className="text-xs text-outline font-medium mt-1" style={{ fontFamily: 'system-ui, sans-serif' }}>
+            Set 3 of 5
           </Text>
         </View>
 
         {/* Indikator Utama Lingkaran Kecepatan */}
-        <View className="items-center justify-center my-4">
-          <View className="w-60 h-60 rounded-full border-4 border-outline-variant/30 items-center justify-center bg-surface-container-lowest shadow-sm p-4">
-            <Text className="text-label-md font-semibold tracking-[0.05em] text-outline uppercase mb-1">
-              LIFT SPEED
-            </Text>
-            <Text className="text-[52px] font-black text-on-surface tracking-tighter">
+        <View className="items-center justify-center py-4">
+          <View className="w-64 h-64 rounded-full border-4 border-outline-variant/20 items-center justify-center bg-surface-container-lowest shadow-sm p-4">
+            <Text className="text-[56px] font-black text-on-surface tracking-tighter" style={{ fontFamily: 'system-ui, sans-serif' }}>
               {currentRep.peakVelocity.toFixed(2)}
             </Text>
-            <Text className="text-xs font-bold text-outline uppercase tracking-widest mt-[-4px]">
+            <Text className="text-xs font-bold text-outline tracking-widest uppercase mt-[-2px]" style={{ fontFamily: 'system-ui, sans-serif' }}>
               M / S
             </Text>
-            <Text className="text-[11px] text-outline/70 mt-2 font-medium">
-              Repetisi {currentRep.repIndex} / 4
+            <Text className="text-xs text-outline font-medium mt-4" style={{ fontFamily: 'system-ui, sans-serif' }}>
+              {currentRep.repIndex} / 4 REPS
             </Text>
           </View>
         </View>
 
-        {/* Kartu Status & Diagnosis AI Real-time */}
-        <FrostedCard className="mb-4">
-          <View className="flex-row justify-between items-center mb-2">
-            <Text className="text-label-sm font-semibold text-outline uppercase tracking-wider">
-              Status Klasifikasi
-            </Text>
-            <View className={`px-2.5 py-0.5 rounded-full ${
-              currentRep.classification === 'form_change' ? 'bg-error-container' : 
-              currentRep.classification === 'fatigue' ? 'bg-tertiary-container' : 'bg-primary-container'
-            }`}>
-              <Text className={`text-[10px] font-bold uppercase ${
-                currentRep.classification === 'form_change' ? 'text-on-error-container' : 
-                currentRep.classification === 'fatigue' ? 'text-on-tertiary-container' : 'text-on-primary-container'
-              }`}>
-                {currentRep.classification.replace('_', ' ')}
-              </Text>
-            </View>
-          </View>
-          <Text className="text-body-md text-on-surface leading-tight">
-            {currentRep.classification === 'form_change' 
-              ? 'Peringatan: Terdeteksi perubahan sudut punggung pada fase konsentrik.'
-              : currentRep.classification === 'fatigue'
-              ? 'Kecepatan melambat wajar akibat akumulasi kelelahan otot.'
-              : 'Gerakan stabil dan konsisten. Pertahankan ritme ini.'}
-          </Text>
-        </FrostedCard>
-
-        {/* Metrik Pendukung Bawah */}
-        <View className="flex-row gap-gutter mb-6">
-          <View className="flex-1 bg-surface-container-lowest p-md rounded-xl items-center border border-outline-variant/20 shadow-sm">
-            <View className="flex-row items-center mb-1">
+        {/* Metrik Pendukung Bawah (Speed Drop & Efficiency) */}
+        <View className="flex-row gap-4">
+          <View className="flex-1 bg-surface-container-lowest p-6 rounded-3xl items-center border border-outline-variant/20 shadow-sm">
+            <View className="flex-row items-center mb-2">
               <Feather name="trending-down" size={16} color="#ba1a1a" />
-              <Text className="text-lg font-bold text-error ml-1">-12%</Text>
+              <Text className="text-2xl font-black text-error ml-1.5" style={{ fontFamily: 'system-ui, sans-serif' }}>-12%</Text>
             </View>
-            <Text className="text-[10px] font-semibold text-outline uppercase tracking-wider">Speed Drop</Text>
+            <Text className="text-[10px] font-bold text-outline uppercase tracking-wider" style={{ fontFamily: 'system-ui, sans-serif' }}>Speed Drop</Text>
           </View>
 
-          <View className="flex-1 bg-surface-container-lowest p-md rounded-xl items-center border border-outline-variant/20 shadow-sm">
-            <View className="flex-row items-center mb-1">
+          <View className="flex-1 bg-surface-container-lowest p-6 rounded-3xl items-center border border-outline-variant/20 shadow-sm">
+            <View className="flex-row items-center mb-2">
               <Ionicons name="flash-outline" size={16} color="#2d4055" />
-              <Text className="text-lg font-bold text-primary ml-1">88%</Text>
+              <Text className="text-2xl font-black text-primary ml-1.5" style={{ fontFamily: 'system-ui, sans-serif' }}>88%</Text>
             </View>
-            <Text className="text-[10px] font-semibold text-outline uppercase tracking-wider">Efficiency</Text>
+            <Text className="text-[10px] font-bold text-outline uppercase tracking-wider" style={{ fontFamily: 'system-ui, sans-serif' }}>Efficiency</Text>
           </View>
         </View>
 
-        {/* Tombol Kontrol Bawah (Pause & Finish Set) */}
-        <View className="flex-row items-center gap-base">
-          <TouchableOpacity 
-            onPress={() => setIsPaused(!isPaused)}
-            className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/30 rounded-xl items-center justify-center shadow-sm"
-          >
-            <Ionicons name={isPaused ? "play" : "pause"} size={20} color="#1a1c1c" />
-          </TouchableOpacity>
+      </View>
 
-          <TouchableOpacity 
-            onPress={() => router.push('/analysis')}
-            className="flex-1 bg-primary h-14 rounded-xl items-center justify-center shadow-md"
-          >
-            <Text className="text-on-primary font-bold text-base tracking-wide uppercase">Finish Set</Text>
-          </TouchableOpacity>
-        </View>
+      {/* Tombol Kontrol Bawah (Pause & Finish Set) */}
+      <View className="max-w-md w-full mx-auto flex-row items-center gap-4 pt-4">
+        <TouchableOpacity 
+          onPress={() => setIsPaused(!isPaused)}
+          className="w-14 h-14 bg-surface-container-lowest border border-outline-variant/30 rounded-full items-center justify-center shadow-sm"
+        >
+          <Ionicons name={isPaused ? "play" : "pause"} size={20} color="#1a1c1c" />
+        </TouchableOpacity>
 
+        <TouchableOpacity 
+          onPress={() => router.push('/analysis')}
+          className="flex-1 bg-primary h-14 rounded-full items-center justify-center shadow-md"
+        >
+          <Text className="text-on-primary font-bold text-xs uppercase tracking-widest" style={{ fontFamily: 'system-ui, sans-serif' }}>
+            Finish Set
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
