@@ -37,16 +37,20 @@ export default function HistoryScreen() {
           </Text>
         </View>
 
-        {/* Grid 4 Kartu Metrik Atas */}
+{/* Grid 4 Kartu Metrik Atas */}
         <View className="flex-row flex-wrap justify-between gap-y-3">
           <View className="w-[48%] bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/20 shadow-sm">
             <Text className="text-xs font-semibold text-outline uppercase tracking-[0.05em] mb-1" style={{ fontFamily: 'system-ui, sans-serif' }}>Avg Velocity</Text>
-            <Text className="text-[24px] font-bold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>0.82 <Text className="text-sm font-normal text-outline">m/s</Text></Text>
+            <Text className="text-[24px] font-bold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>
+              0.82 <Text className="text-sm font-normal text-outline">m/s</Text>
+            </Text>
           </View>
 
           <View className="w-[48%] bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/20 shadow-sm">
             <Text className="text-xs font-semibold text-outline uppercase tracking-[0.05em] mb-1" style={{ fontFamily: 'system-ui, sans-serif' }}>Peak Power</Text>
-            <Text className="text-[24px] font-bold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>845 <Text className="text-sm font-normal text-outline">W</Text></Text>
+            <Text className="text-[24px] font-bold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>
+              845 <Text className="text-sm font-normal text-outline">W</Text>
+            </Text>
           </View>
 
           <View className="w-[48%] bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/20 shadow-sm">
