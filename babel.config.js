@@ -6,7 +6,11 @@ module.exports = function (api) {
       "nativewind/babel"
     ],
     plugins: [
-      "react-native-reanimated/plugin", // Ini tetap wajib di paling bawah
+      // Tambahkan plugin inline-import untuk mendukung migrasi SQL Drizzle
+      ["inline-import", { extensions: [".sql"] }],
+      
+      // Plugin Reanimated wajib ditaruh di bagian paling bawah
+      "react-native-reanimated/plugin",
     ],
   };
 };

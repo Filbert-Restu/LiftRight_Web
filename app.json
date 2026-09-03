@@ -35,7 +35,8 @@
           ],
           "bluetoothAlwaysPermission": "LiftRight membutuhkan izin Bluetooth untuk terhubung ke unit sensor punggung."
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "extra": {
       "router": {},

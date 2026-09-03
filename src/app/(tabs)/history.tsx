@@ -1,8 +1,24 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { FrostedCard } from '../../components/FrostedCard';
+import { fetchAllSessions } from '../../db/queries';
 
 export default function HistoryScreen() {
+  const [sessionList, setSessionList] = useState<any[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadSessions();
+    }, [])
+  );
+
+  const loadSessions = async () => {
+    const data = await fetchAllSessions();
+    setSessionList(data);
+  };
+
   return (
     <ScrollView 
       className="flex-1 bg-background" 
@@ -13,9 +29,9 @@ export default function HistoryScreen() {
     >
       <View className="max-w-md w-full mx-auto" style={{ gap: 20 }}>
         
-        {/* Header Atas (Tombol kiri dihilangkan, teks LIFTRIGHT diposisikan rapi) */}
+        {/* Header Atas */}
         <View className="flex-row justify-between items-center">
-          <View className="w-10" /> {/* Spacer penyeimbang */}
+          <View className="w-10" />
           <Text className="text-sm font-bold tracking-[0.05em] text-on-surface uppercase" style={{ fontFamily: 'system-ui, sans-serif' }}>
             LiftRight
           </Text>
@@ -37,7 +53,7 @@ export default function HistoryScreen() {
           </Text>
         </View>
 
-{/* Grid 4 Kartu Metrik Atas */}
+        {/* Grid 4 Kartu Metrik Atas */}
         <View className="flex-row flex-wrap justify-between gap-y-3">
           <View className="w-[48%] bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/20 shadow-sm">
             <Text className="text-xs font-semibold text-outline uppercase tracking-[0.05em] mb-1" style={{ fontFamily: 'system-ui, sans-serif' }}>Avg Velocity</Text>
@@ -88,53 +104,49 @@ export default function HistoryScreen() {
           </FrostedCard>
         </View>
 
-        {/* Daftar Sesi Lampau */}
+        {/* Daftar Sesi Lampau (Dinamis dari SQLite dengan Scroll Mandiri) */}
         <View className="mt-2">
           <Text className="text-xs font-semibold text-on-surface uppercase tracking-[0.05em] px-1 mb-2" style={{ fontFamily: 'system-ui, sans-serif' }}>
             Previous Sessions
           </Text>
           
           <FrostedCard>
-            <View style={{ gap: 16 }}>
-              <View className="flex-row justify-between items-center border-b border-outline-variant/30 pb-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-lg bg-surface-container items-center justify-center">
-                    <Feather name="calendar" size={18} color="#2d4055" />
+            {sessionList.length === 0 ? (
+              <Text className="text-xs text-outline py-2 italic text-center">Belum ada riwayat sesi lokal.</Text>
+            ) : (
+              <ScrollView 
+                style={{ maxHeight: 260 }} 
+                showsVerticalScrollIndicator={true}
+                nestedScrollEnabled={true}
+                contentContainerStyle={{ gap: 16, paddingRight: 4 }}
+              >
+                {sessionList.map((item, index) => (
+                  <View 
+                    key={item.id} 
+                    className={`flex-row justify-between items-center ${
+                      index < sessionList.length - 1 ? 'border-b border-outline-variant/30 pb-4' : 'pt-1'
+                    }`}
+                  >
+                    <View className="flex-row items-center gap-3">
+                      <View className="w-10 h-10 rounded-lg bg-surface-container items-center justify-center">
+                        <Feather name="calendar" size={18} color="#2d4055" />
+                      </View>
+                      <View>
+                        <Text className="text-sm font-semibold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>
+                          {item.exercise}
+                        </Text>
+                        <Text className="text-xs text-outline mt-0.5" style={{ fontFamily: 'system-ui, sans-serif' }}>
+                          {new Date(item.startedAt).toLocaleDateString()} • Vol: {item.totalVolumeKg ?? 0} kg
+                        </Text>
+                      </View>
+                    </View>
+                    <Text className="text-sm font-bold text-primary" style={{ fontFamily: 'system-ui, sans-serif' }}>
+                      {item.avgEfficiency ? `${item.avgEfficiency}% Eff` : 'Selesai'}
+                    </Text>
                   </View>
-                  <View>
-                    <Text className="text-sm font-semibold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>Heavy Squat Focus</Text>
-                    <Text className="text-xs text-outline mt-0.5" style={{ fontFamily: 'system-ui, sans-serif' }}>Oct 24 • 45 mins • 5 Sets</Text>
-                  </View>
-                </View>
-                <Text className="text-sm font-bold text-primary" style={{ fontFamily: 'system-ui, sans-serif' }}>0.75 m/s</Text>
-              </View>
-
-              <View className="flex-row justify-between items-center border-b border-outline-variant/30 pb-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-lg bg-surface-container items-center justify-center">
-                    <Feather name="calendar" size={18} color="#2d4055" />
-                  </View>
-                  <View>
-                    <Text className="text-sm font-semibold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>Bench & Accessories</Text>
-                    <Text className="text-xs text-outline mt-0.5" style={{ fontFamily: 'system-ui, sans-serif' }}>Oct 22 • 60 mins • 4 Sets</Text>
-                  </View>
-                </View>
-                <Text className="text-sm font-bold text-primary" style={{ fontFamily: 'system-ui, sans-serif' }}>0.60 m/s</Text>
-              </View>
-
-              <View className="flex-row justify-between items-center pt-1">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-lg bg-surface-container items-center justify-center">
-                    <Feather name="calendar" size={18} color="#2d4055" />
-                  </View>
-                  <View>
-                    <Text className="text-sm font-semibold text-on-surface" style={{ fontFamily: 'system-ui, sans-serif' }}>Deadlift Speed Work</Text>
-                    <Text className="text-xs text-outline mt-0.5" style={{ fontFamily: 'system-ui, sans-serif' }}>Oct 19 • 35 mins • 8 Sets</Text>
-                  </View>
-                </View>
-                <Text className="text-sm font-bold text-primary" style={{ fontFamily: 'system-ui, sans-serif' }}>1.05 m/s</Text>
-              </View>
-            </View>
+                ))}
+              </ScrollView>
+            )}
           </FrostedCard>
         </View>
 
