@@ -2,6 +2,7 @@ import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const sessions = sqliteTable("sessions", {
   id: text("id").primaryKey(),
+  userId: text("user_id"), // Tambahkan kolom ini untuk menyimpan ID Supabase
   startedAt: integer("started_at").notNull(),
   endedAt: integer("ended_at"),
   exercise: text("exercise").notNull(),

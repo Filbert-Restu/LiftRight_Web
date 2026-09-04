@@ -1,3 +1,4 @@
+import { useAuthStore } from '../stores/authStore'; // Import auth store
 import { db } from './client';
 import { reps, sessions, sets } from './schema';
 
@@ -32,10 +33,15 @@ export async function saveCompleteSession(sessionData: {
   }>;
 }) {
   try {
+    // Ambil user yang sedang aktif dari Zustand store secara langsung
+    const currentUser = useAuthStore.getState().user;
+    const activeUserId = currentUser ? currentUser.id : null;
+
     await db.transaction(async (tx) => {
-      // 1. Simpan data utama sesi
+      // 1. Simpan data utama sesi (termasuk userId)
       await tx.insert(sessions).values({
         id: sessionData.id,
+        userId: activeUserId, // <--- Diikat ke ID Supabase atau null jika offline/belum login
         startedAt: sessionData.startedAt,
         endedAt: sessionData.endedAt,
         exercise: sessionData.exercise,
@@ -76,7 +82,7 @@ export async function saveCompleteSession(sessionData: {
       }
     });
 
-    console.log('Sesi latihan lengkap berhasil disimpan ke SQLite secara lokal.');
+    console.log('Sesi latihan lengkap berhasil disimpan ke SQLite secara lokal dengan User ID:', activeUserId);
     return true;
   } catch (error) {
     console.error('Gagal menyimpan sesi latihan lengkap:', error);
@@ -84,10 +90,10 @@ export async function saveCompleteSession(sessionData: {
   }
 }
 
-// Tambahkan fungsi ini di bawahnya agar bisa dibaca oleh history.tsx
 export async function fetchAllSessions() {
   try {
-    const result = await db.select().from(sessions).all();
+    // Hapus '.all()' karena db.select() dengan await sudah mengembalikan data array
+    const result = await db.select().from(sessions);
     return result;
   } catch (error) {
     console.error('Gagal memuat riwayat sesi:', error);
